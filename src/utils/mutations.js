@@ -1,4 +1,4 @@
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from './firebase';
 
 // Functions for database mutations
@@ -26,6 +26,12 @@ export async function addEntry(entry) {
 
 export async function updateEntry(entry) {
    // TODO: Create Mutation to Edit Entry
+   // Even though there's no typing, we can assume that the
+   // entry getting fed in has an ID
+   const entryRef = await doc(collection(db, 'entries'), entry.id)
+   console.log(entry)
+   await updateDoc(entryRef, entry)
+   
 }
 
 export async function deleteEntry(entry) {
