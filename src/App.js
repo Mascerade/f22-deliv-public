@@ -25,7 +25,7 @@ import './App.css';
 import EntryTable from './components/EntryTable';
 import EntryModal from './components/EntryModal';
 import { orderTable } from './utils/mutations';
-import { orderByCols, getOrderByColById } from './utils/dropdowns';
+import { orderByCols, sortTypes, getOrderByColById, getSortTypeById } from './utils/dropdowns';
 import { mainListItems } from './components/listItems';
 import { db, SignInScreen } from './utils/firebase';
 import { emptyEntry } from './utils/mutations';
@@ -109,9 +109,6 @@ export default function App() {
     setOpen(!open);
   };
 
-  // For order by functionality
-  const [orderByCol, setOrderByCol] = useState(0);
-
   // Data fetching from DB. Would not recommend changing.
   // Reference video for snapshot functionality https://www.youtube.com/watch?v=ig91zc-ERSE
 
@@ -133,10 +130,16 @@ export default function App() {
       setEntries(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
     })
   }, [currentUser]);
-
+  // For order by functionality
+  const [orderByCol, setOrderByCol] = useState(0);
+  const [orderBySortType, setOrderBySortType] = useState(0);
   function changeOrderByAttr(event) {
     setOrderByCol(event.target.value)
-    orderTable(getOrderByColById(event.target.value).name)
+    orderTable(getOrderByColById(event.target.value).name, getSortTypeById(orderBySortType).name)
+  }
+  function changeOrderBySortAttr(event) {
+    setOrderBySortType(event.target.value)
+    orderTable(getOrderByColById(orderByCol).name, getSortTypeById(event.target.value).name)
   }
   // Main content of homescreen. This is displayed conditionally from user auth status
 
@@ -156,6 +159,18 @@ export default function App() {
                     onChange={changeOrderByAttr}
                   >
                     {orderByCols.map((orderByCol) => (<MenuItem value={orderByCol.id}>{orderByCol.name}</MenuItem>))}
+                  </Select>
+               </FormControl>
+               <FormControl>
+                  <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={orderBySortType}
+                    label="Order By"
+                    onChange={changeOrderBySortAttr}
+                  >
+                    {sortTypes.map((orderBySortType) => (<MenuItem value={orderBySortType.id}>{orderBySortType.name}</MenuItem>))}
                   </Select>
                </FormControl>
               <EntryModal entry={emptyEntry} type="add" user={currentUser} />

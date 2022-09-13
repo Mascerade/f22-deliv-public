@@ -39,8 +39,8 @@ export async function deleteEntry(entry) {
    await deleteDoc(entryRef)
 }
 
-export async function orderTable(orderByCol) {
-   console.log(orderByCol)
-   const q = await query(collection(db, 'entries'), orderBy(orderByCol, 'asc'))
+export async function orderTable(orderByCol, sortType) {
+   const q = await query(collection(db, 'entries'), orderBy(orderByCol, sortType))
    await getDocs(q);
 }
+

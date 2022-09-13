@@ -16,10 +16,19 @@ export const orderByCols = [
    { id: 4, name: "Category" }
 ]
 
+export const sortTypes = [
+   { id: 0, name: "ASC" },
+   { id: 1, name: "DESC" }
+]
+
 export function getCategory(category_id) {
    return categories.find(x => x.id === category_id)
 }
 
 export function getOrderByColById(orderById) {
    return orderByCols.find(col => col.id === orderById)
+}
+
+export function getSortTypeById(sortTypeId) {
+   return sortTypes.find(sortType => sortType.id == sortTypeId)
 }
