@@ -11,6 +11,10 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import Stack from "@mui/material/Stack";
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -20,9 +24,13 @@ import { useEffect, useState } from "react";
 import './App.css';
 import EntryTable from './components/EntryTable';
 import EntryModal from './components/EntryModal';
+import { orderTable } from './utils/mutations';
+import { orderByCols, getOrderByColById } from './utils/dropdowns';
 import { mainListItems } from './components/listItems';
 import { db, SignInScreen } from './utils/firebase';
 import { emptyEntry } from './utils/mutations';
+import * as React from 'react';
+
 
 // MUI styling constants
 
@@ -101,6 +109,9 @@ export default function App() {
     setOpen(!open);
   };
 
+  // For order by functionality
+  const [orderByCol, setOrderByCol] = useState(0);
+
   // Data fetching from DB. Would not recommend changing.
   // Reference video for snapshot functionality https://www.youtube.com/watch?v=ig91zc-ERSE
 
@@ -116,12 +127,17 @@ export default function App() {
     the page client-side after making an add/update/delete. The page will automatically
     sync with the database! */
     onSnapshot(q, (snapshot) => {
+      console.log('jsdlfjakls;d')
       // Set Entries state variable to the current snapshot
       // For each entry, appends the document ID as an object property along with the existing document data
       setEntries(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })))
     })
   }, [currentUser]);
 
+  function changeOrderByAttr(event) {
+    setOrderByCol(event.target.value)
+    orderTable(getOrderByColById(event.target.value).name)
+  }
   // Main content of homescreen. This is displayed conditionally from user auth status
 
   function mainContent() {
@@ -130,6 +146,18 @@ export default function App() {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Stack direction="row" spacing={3}>
+              <FormControl>
+                  <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={orderByCol}
+                    label="Order By"
+                    onChange={changeOrderByAttr}
+                  >
+                    {orderByCols.map((orderByCol) => (<MenuItem value={orderByCol.id}>{orderByCol.name}</MenuItem>))}
+                  </Select>
+               </FormControl>
               <EntryModal entry={emptyEntry} type="add" user={currentUser} />
             </Stack>
           </Grid>

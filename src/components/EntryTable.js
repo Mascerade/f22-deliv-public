@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import EntryModal from './EntryModal';
-import { getCategory } from '../utils/categories';
+import { getCategory } from '../utils/dropdowns';
 
 // Table component that displays entries on home screen
 

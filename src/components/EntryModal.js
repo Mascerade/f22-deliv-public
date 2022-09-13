@@ -12,7 +12,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
 import { useState } from 'react';
-import { categories } from '../utils/categories';
+import { categories } from '../utils/dropdowns';
 import { addEntry, updateEntry, deleteEntry } from '../utils/mutations';
 
 // Modal component for individual entries.
